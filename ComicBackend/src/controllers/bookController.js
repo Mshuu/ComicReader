@@ -6,7 +6,7 @@ const opds = "http://l2.mml2.net:2202";
 
 const GetBooksOPDS = async() => {
     try {
-        let res = await utils.doRequest(opds + "/opds-comics/1/");
+        let res = await utils.doRequest(opds + "/opds-comics/4500");
         let json = xmlParser.toJson(res);
         let obj = JSON.parse(json);
         HandleBooks(obj.feed.entry);
@@ -23,6 +23,7 @@ const HandleBooks = (books) => {
 
 const GetBookIssues = async(book,id) => {
     try {
+        let url = opds + "/opds-comics/" + id + "/?displayFiles=true";
         let res = await utils.doRequest(url);
         let json = xmlParser.toJson(res);
         let obj = JSON.parse(json);
@@ -30,12 +31,12 @@ const GetBookIssues = async(book,id) => {
         book.issues = JSON.stringify(obj.feed.entry);
         book.issueCount = obj.feed.entry.length;
         book.blah=[{"hello":"yues"}];
-        let book = await dbModel.FindOne("books",{id: book.id});
-        if (book){
+        let result2 = await dbModel.FindOne("books",{id: book.id});
+        if (result2){
             await dbModel.UpdateOne("books",{id: book.id}, { $set: {issues: book.issues}});
         }
-        if (!book){
-            dbModel.InsertOne("books",{book});
+        if (!result2){
+            dbModel.InsertOne("books",book);
         }
 
     } catch(e){

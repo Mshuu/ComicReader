@@ -6,6 +6,7 @@ function doRequest(url){
             if (!error && res.statusCode == 200) {
                 resolve(body);
             } else {
+                console.log(url);
                 reject(error);
             }
         });
