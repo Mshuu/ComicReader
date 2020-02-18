@@ -10,6 +10,7 @@ var MongoClient = require('mongodb').MongoClient;
 var urlMongo = "mongodb://localhost:27017/comicbooks";
 var utils = require("./utils");
 let ReadController = require('./controllers/readController.js');
+let HomeController = require('./controllers/homeController.js');
 
 
 app.get('/', async function(req, res){
@@ -24,16 +25,12 @@ app.get('/', async function(req, res){
 io.on('connection', function(socket){
   console.log('a user connected');
 
-  socket.on('GetHome',async function(msg){
-    console.log("MSG RECEIVED");
-    GetHome(msg,socket);
-  });
+  socket.on('GetHome', () => {HomeController.GetHome(socket)});
+  socket.on('GetReads', (msg) => {ReadController.getReads(msg,socket)});
+  
   socket.on('disconnect', function() {
       console.log("lost user");
 
-});
-socket.on('GetReads',function(msg){
-    ReadController.getReads(msg,socket);
 });
   socket.on('GetIssues',async function(msg){
       RequestIssue(msg,socket);
@@ -146,29 +143,7 @@ async function GetBookIssues(book,id){
     }
 
 }
-function GetHome(id,socket){
-    MongoClient.connect(urlMongo, function(err, db) {
-        if (err) throw err;
-        var dbo = db.db("comicbooks");
-        dbo.collection("books").find({}).toArray(function(err, result) {
-          if (err) throw err;
-          socket.emit("GotHome",result);
-          db.close();
-        });
-      });
-}
-function GetReads(id,socket){
-  console.log(id);
-  MongoClient.connect(urlMongo, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db("comicbooks");
-    dbo.collection("readstatus").find({userId: parseInt(id)}).toArray(function(err, result) {
-      if (err) throw err;
-      socket.emit("GotReads",result);
-      db.close();
-    });
-  });
-}
+
 function GetSpecificRead(msg,socket){
   let msg2 = JSON.parse(msg);
   let user = msg2.userId;
