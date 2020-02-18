@@ -8,11 +8,17 @@ var opds = "http://l2.mml2.net:2202";
 let xmlParser = require('xml2json');
 var MongoClient = require('mongodb').MongoClient;
 var urlMongo = "mongodb://localhost:27017/comicbooks";
+var utils = require("./utils");
+let ReadController = require('./controllers/readController.js');
 
 
 app.get('/', async function(req, res){
-  let json = await GetBooksOPDS();
-  res.send(json);
+  try {
+    let json = await GetBooksOPDS(res);
+    res.send(json);
+  } catch(e){
+    console.log(e);
+  }
 });
 
 io.on('connection', function(socket){
@@ -27,7 +33,7 @@ io.on('connection', function(socket){
 
 });
 socket.on('GetReads',function(msg){
-    GetReads(msg,socket);
+    ReadController.getReads(msg,socket);
 });
   socket.on('GetIssues',async function(msg){
       RequestIssue(msg,socket);
@@ -68,33 +74,30 @@ function RequestIssue(id,socket){
 
 async function GetBooksOPDS(socket){
     console.log("running");
-    let res = await doRequest(opds + "/opds-comics/1/");
+    let res = await utils.doRequest(opds + "/opds-comics/1/");
     let json = xmlParser.toJson(res);
+    console.log(res);
     let obj = JSON.parse(json);
     HandleBooks(obj.feed.entry,socket);
 }
 
 async function GetIssue(id,page){
     var url = opds + "/opds-comics/comicreader/" + id + "?page=" + page + "&width=1080";
-    let res = await doRequest(url);
+    let res = await utils.doRequest(url);
 
 }
 
 async function HandleBooks(books,socket){
     let finalBooks = [];
     for (var i=0;i<books.length;i++){
-        var book = {};
-        book.title=books[i].title;
-        book.id = books[i].id;
-        book.updated = books[i].updated;
-        book.issues = [];
+        var book = {"title":books[i].title, "id": books[i].id,"updated": books[i].updated, "issues": []};
         GetBookIssues(book,books[i].id);
     }
 }
 async function GetBookIssues(book,id){
     try {
         var url = opds + "/opds-comics/" + id + "/?displayFiles=true";
-        let res = await doRequest(url);
+        let res = await utils.doRequest(url);
         let json = xmlParser.toJson(res);
         let obj = JSON.parse(json);
         obj.feed.tempId = id;
@@ -219,28 +222,3 @@ function UpdateReads(msg,socket){
   });
 
 }
-function InsertIntoDB(collection,object){
-    mongo.connect(url,function(err,db){
-        if (err) throw err;
-    
-        var dbo = db.db("comicbooks");
-        dbo.collection(collection).insertOne(object,function(err,res){
-            if (err) throw err;
-            console.log("inserted");
-            db.close();
-        });
-    
-    });
-}
-
-function doRequest(url) {
-    return new Promise(function (resolve, reject) {
-      request(url, function (error, res, body) {
-        if (!error && res.statusCode == 200) {
-          resolve(body);
-        } else {
-          reject(error);
-        }
-      });
-    });
-  }

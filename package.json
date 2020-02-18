@@ -1,17 +1,40 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "start expo start COMICS && start node ComicBackend/index.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject",
-    "test": "jest --watchAll"
+    "start": "start expo start COMICS && start node ComicBackend/src/index.js",
+    "build": "npm-run-all clean transpile",
+    "server": "start node ./ComicBackend/dist/index.js",
+    "dev": "npm-run-all build server",
+    "prod": "NODE_ENV=production npm-run-all build server",
+    "transpile": "babel ./ComicBackend/src --out-dir ./ComicBackend/dist",
+    "clean": "rimraf ComicBackend/dist",
+    "watch:dev": "nodemon",
+    "test": "jest"
+  },
+  "type": "module",
+  "nodemonConfig": {
+    "exec": "npm run dev",
+    "watch": [
+      "ComicBackend/src/*",
+      "ComicBackend/public/*"
+    ],
+    "ignore": [
+      "**/__tests__/**",
+      "*.test.js",
+      "*.spec.js"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   },
   "jest": {
-    "preset": "jest-expo"
+    "testEnvironment": "node"
   },
   "dependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
     "@expo/samples": "~36.0.0",
     "@expo/vector-icons": "~10.0.0",
     "@react-navigation/web": "~1.0.0-alpha.9",
@@ -20,7 +43,11 @@
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-web-browser": "~8.0.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.2",
     "native-base": "^2.13.8",
+    "nodemon": "^2.0.2",
+    "npm-run-all": "^4.1.5",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -33,16 +60,16 @@
     "react-navigation": "~4.0.10",
     "react-navigation-stack": "~1.10.3",
     "react-navigation-tabs": "~2.6.2",
-    "socket.io-client": "^2.1.1",
-    "express": "^4.17.1",
-    "mongodb": "^3.5.2",
     "request": "^2.88.0",
+    "rimraf": "^3.0.2",
+    "socket.io-client": "^2.1.1",
     "socketio": "^1.0.0",
     "xml2json": "^0.12.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.8.4",
     "babel-preset-expo": "~8.0.0",
+    "jest": "^25.1.0",
     "jest-expo": "~36.0.1"
   },
   "private": true
