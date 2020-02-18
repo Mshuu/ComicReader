@@ -12,7 +12,6 @@ const getReads = async(id,socket) => {
 }
 
 const updateReads = async(msg) => {
-  console.log("reading");
   msg = JSON.parse(msg);
   try {
     let foundComic = await dbModel.FindOne("readstatus",{userId: msg.userId,issueId: msg.issueId});
@@ -21,15 +20,31 @@ const updateReads = async(msg) => {
       await dbModel.UpdateOne("readstatus",{userId: msg.userId,issueId:msg.issueId},{ $set: {page: msg.page}});
     }
     if (!foundComic){
-      await dbModel.InsertOne("readstatus",{userId: msg.userId,issueId: msg.issueId,page: msg.page});
+      dbModel.InsertOne("readstatus",{userId: msg.userId,issueId: msg.issueId,page: msg.page});
     }
   } catch(e){
     console.log(e);
   }
 }
 
+const getSpecificRead = async(msg,socket) => {
+  msg = JSON.parse(msg);
+  try{
+    let result = await dbModel.FindOne("readstatus",{userId: msg.userId,issueId:msg.issueId});
+    if (result){
+      socket.emit("GotSpecificRead",result.page);
+    }
+    if (!result){
+      socket.emit("GotSpecificRead",0);
+    }
+  } catch(e){
+    console.log(e);
+  }
+
+}
 
 module.exports = {
   getReads: getReads,
-  updateReads: updateReads
+  updateReads: updateReads,
+  getSpecificRead: getSpecificRead
 }

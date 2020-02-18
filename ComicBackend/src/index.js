@@ -23,6 +23,8 @@ io.on('connection', function(socket){
 
   socket.on('UpdateReads', (msg) => {ReadController.updateReads(msg)});
 
+  socket.on('GetSpecificRead', (msg) => {ReadController.getSpecificRead(msg,socket)});
+
   socket.on('GetIssues',async function(msg){
       RequestIssue(msg,socket);
   });
@@ -32,9 +34,6 @@ io.on('connection', function(socket){
   socket.on("GetIssue",function(msg){
       GetIssue(msg.id,msg.page);
   });
-  socket.on("GetSpecificRead",function(msg){
-    GetSpecificRead(msg,socket);
-  })
 });
 
 http.listen(3000, function(){
@@ -129,59 +128,5 @@ async function GetBookIssues(book,id){
     } catch(e){
         console.log(e);
     }
-
-}
-
-function GetSpecificRead(msg,socket){
-  let msg2 = JSON.parse(msg);
-  let user = msg2.userId;
-  let issue = msg2.issueId;
-
-  MongoClient.connect(urlMongo, function(err,db){
-    if (err) throw err;
-    var dbo = db.db("comicbooks");
-    dbo.collection("readstatus").findOne({userId: user,issueId: issue}, function(err, result){
-      if (err) throw err;
-      if (result){
-      socket.emit("GotSpecificRead",result.page);
-      } else {
-        socket.emit("GotSpecificRead",0);
-      }
-    })
-    db.close();
-  })
-}
-function UpdateReads(msg,socket){
-  let msg2 = JSON.parse(msg);
-  let user = msg2.userId;
-  let issue = msg2.issueId;
-  let page=  msg2.page;
-  MongoClient.connect(urlMongo, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db("comicbooks");
-    dbo.collection("readstatus").findOne({userId: user,issueId: issue}, function(err, result) {
-      if (err) throw err;
-      if (result){
-        MongoClient.connect(urlMongo, function(err, db) {
-          if (err) throw err;
-          var dbo = db.db("comicbooks");
-          dbo.collection("readstatus").updateOne({userId: user,issueId: issue},{ $set: {page: page}}, function(err, result) {
-            if (err) throw err;
-            db.close();
-          });
-        });
-      } else {
-        MongoClient.connect(urlMongo, function(err, db) {
-          if (err) throw err;
-          var dbo = db.db("comicbooks");
-          dbo.collection("readstatus").insertOne({userId: user, issueId: issue, page: page}, function(err, result) {
-            if (err) throw err;
-            db.close();
-          });
-        });
-      }
-      db.close();
-    });
-  });
 
 }
