@@ -11,4 +11,25 @@ const getReads = async(id,socket) => {
   }
 }
 
-module.exports.getReads = getReads;
+const updateReads = async(msg) => {
+  console.log("reading");
+  msg = JSON.parse(msg);
+  try {
+    let foundComic = await dbModel.FindOne("readstatus",{userId: msg.userId,issueId: msg.issueId});
+    console.log(foundComic);
+    if (foundComic){
+      await dbModel.UpdateOne("readstatus",{userId: msg.userId,issueId:msg.issueId},{ $set: {page: msg.page}});
+    }
+    if (!foundComic){
+      await dbModel.InsertOne("readstatus",{userId: msg.userId,issueId: msg.issueId,page: msg.page});
+    }
+  } catch(e){
+    console.log(e);
+  }
+}
+
+
+module.exports = {
+  getReads: getReads,
+  updateReads: updateReads
+}

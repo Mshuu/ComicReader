@@ -12,26 +12,17 @@ var utils = require("./utils");
 let ReadController = require('./controllers/readController.js');
 let HomeController = require('./controllers/homeController.js');
 
-
-app.get('/', async function(req, res){
-  try {
-    let json = await GetBooksOPDS(res);
-    res.send(json);
-  } catch(e){
-    console.log(e);
-  }
-});
-
 io.on('connection', function(socket){
   console.log('a user connected');
 
   socket.on('GetHome', () => {HomeController.GetHome(socket)});
-  socket.on('GetReads', (msg) => {ReadController.getReads(msg,socket)});
-  
-  socket.on('disconnect', function() {
-      console.log("lost user");
 
-});
+  socket.on('GetReads', (msg) => {ReadController.getReads(msg,socket)});
+
+  socket.on('disconnect', () => {console.log("user disconnected")});
+
+  socket.on('UpdateReads', (msg) => {ReadController.updateReads(msg)});
+
   socket.on('GetIssues',async function(msg){
       RequestIssue(msg,socket);
   });
@@ -40,9 +31,6 @@ io.on('connection', function(socket){
   });
   socket.on("GetIssue",function(msg){
       GetIssue(msg.id,msg.page);
-  });
-  socket.on("UpdateReads",function(msg){
-    UpdateReads(msg,socket);
   });
   socket.on("GetSpecificRead",function(msg){
     GetSpecificRead(msg,socket);

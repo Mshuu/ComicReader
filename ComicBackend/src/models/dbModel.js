@@ -29,7 +29,35 @@ const Find = (collection,obj) => {
     });
 }
 
+const FindOne = (collection,obj) => {
+    return new Promise(function (resolve,reject){
+        MongoClient.connect(urlMongo, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db("comicbooks");
+            dbo.collection(collection).findOne(obj, function(err, result) {
+            if (err) reject(err);
+            resolve(result);
+            });
+        });
+    });
+}
+
+const UpdateOne = (collection,objSelect,objUpdate) => {
+    return new Promise(function (resolve,reject){
+        MongoClient.connect(urlMongo, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db("comicbooks");
+            dbo.collection(collection).updateOne(objSelect,objUpdate, function(err, result) {
+            if (err) reject(err);
+            resolve(result);
+            });
+        });
+    });
+}
+
 module.exports = {
     Find: Find,
-    InsertOne: InsertOne
+    InsertOne: InsertOne,
+    FindOne: FindOne,
+    UpdateOne: UpdateOne
 }
