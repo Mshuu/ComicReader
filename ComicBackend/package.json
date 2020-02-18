@@ -1,0 +1,30 @@
+{
+  "name": "comicbackend",
+  "version": "1.0.0",
+  "description": "a nodejs backend to pull opds comics and serve",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adrian Daluz",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mshuu/comicbackend.git"
+  },
+  "keywords": [
+    "comic",
+    "backend"
+  ],
+  "bugs": {
+    "url": "https://github.com/Mshuu/comicbackend/issues"
+  },
+  "homepage": "https://github.com/Mshuu/comicbackend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.5.2",
+    "request": "^2.88.0",
+    "socketio": "^1.0.0",
+    "xml2json": "^0.12.0"
+  }
+}
