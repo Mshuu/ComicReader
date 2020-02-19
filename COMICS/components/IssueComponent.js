@@ -34,7 +34,7 @@ export class UnFinishedIssue extends React.PureComponent {
             <Card>
                 <TouchableOpacity  onPress={() => this._CardOnPress()}>
                     <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                        <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2053" + this.state.item.link[0].href}} style={{height: 277,width:180,flex: 1}}/>
+                        <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={{height: 277,width:180,flex: 1}}/>
                     </CardItem>
                 </TouchableOpacity>
                 <CardItem>
@@ -73,7 +73,7 @@ export class UnreadIssue extends React.PureComponent {
             <Card>
                 <TouchableOpacity  onPress={() => this._CardOnPress()}>
                     <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                        <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2053" + this.state.item.link[0].href}} style={{height: 277,width:180,flex: 1}}/>
+                        <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={{height: 277,width:180,flex: 1}}/>
                     </CardItem>
                 </TouchableOpacity>
             </Card>  
@@ -105,7 +105,7 @@ export class FinishedIssue extends React.PureComponent {
             <Card>
                 <TouchableOpacity onPress={() => this._CardOnPress()}>
                     <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                        <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2053" + this.state.item.link[0].href}} style={{height: 277,width:180,flex: 1,opacity: 0.3}}/>
+                        <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={{height: 277,width:180,flex: 1,opacity: 0.3}}/>
                     </CardItem>
                 </TouchableOpacity>
             </Card>

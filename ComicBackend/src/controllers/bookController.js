@@ -1,7 +1,7 @@
 var utils = require("../utils");
 let xmlParser = require('xml2json');
 let dbModel = require('../models/dbModel.js');
-const opds = "http://l2.mml2.net:2053";
+const opds = "http://opds.mml2.net:2202";
 
 
 const GetBooksOPDS = async() => {
