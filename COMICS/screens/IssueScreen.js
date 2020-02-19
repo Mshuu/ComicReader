@@ -21,7 +21,7 @@ import { MonoText } from '../components/StyledText';
 import { FlatList } from 'react-native-gesture-handler';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
-
+//TODO: Refactor this whole screen, has a mix of components and classes and functions and a whole bunch of stuff
 export default class IssueScreen extends Component {
     state = {
         page: 0,
