@@ -16,61 +16,9 @@ import { SearchBar } from 'react-native-elements';
 
 import { MonoText } from '../components/StyledText';
 import { FlatList } from 'react-native-gesture-handler';
+import { MultipleIssueBook } from '../components/MultipleIssueBook';
 
 
-class MyInternalItem extends React.PureComponent{
-  _onLongPressButton = (id) => {
-    console.log("long pressed" + id);
-  }
-  render() {
-    let id = this.props.item.id;
-    if (this.props.item.page > 0){
-      if (this.props.item.page >= this.props.item.link[3]['pse:count']){ 
-        return (
-          <Card>
-                        <TouchableOpacity  onLongPress={() => this._onLongPressButton(this.props.item.id)}  onPress={() => this.props.state.navigate('IssueScreen',{id: this.props.item.id,socket: this.props.state.socket,title: this.props.item.title,showHeader: false,pageCount: this.props.item.link[3]['pse:count']})}>
-    
-              <CardItem cardBody button onLongPress={() => this._onLongPressButton(this.props.item.id)} onPress={() => this.props.state.navigate('IssueScreen',{id: id,socket: this.props.state.socket,title: this.props.item.title,showHeader: false,pageCount: this.props.item.link[3]['pse:count']})}>
-                <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.link[0].href}} style={{height: 277,width:180,flex: 1,opacity: 0.3}}/>
-              </CardItem>
-              </TouchableOpacity>
-    
-          </Card>
-        )
-      } else {
-        let tempWidth = (this.props.item.page / this.props.item.link[3]['pse:count']) * 100;
-        return(
-        <Card>
-        <TouchableOpacity  onLongPress={() => this._onLongPressButton(this.props.item.id)}  onPress={() => this.props.state.navigate('IssueScreen',{id: this.props.item.id,socket: this.props.state.socket,title: this.props.item.title,showHeader: false,pageCount: this.props.item.link[3]['pse:count']})}>
-
-<CardItem cardBody button onLongPress={() => this._onLongPressButton(this.props.item.id)} onPress={() => this.props.state.navigate('IssueScreen',{id: id,socket: this.props.state.socket,title: this.props.item.title,showHeader: false,pageCount: this.props.item.link[3]['pse:count']})}>
-<Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.link[0].href}} style={{height: 277,width:180,flex: 1}}/>
-</CardItem>
-</TouchableOpacity>
-<CardItem>
-<View style={styles.progressBar}>
-              <View style={[StyleSheet.absoluteFill], {backgroundColor: "#8BED4F", width : "" + tempWidth + "%", maxWidth: 180 }}></View>
-              </View>
-              </CardItem>
-
-</Card>
-        );
-      }
-    } else {
-    return (
-      <Card>
-                    <TouchableOpacity   onLongPress={() => this._onLongPressButton(this.props.item.id)} onPress={() => this.props.state.navigate('IssueScreen',{id: this.props.item.id,socket: this.props.state.socket,title: this.props.item.title,showHeader: false,pageCount: this.props.item.link[3]['pse:count']})}>
-
-          <CardItem cardBody button onLongPress={() => this._onLongPressButton(this.props.item.id)} onPress={() => this.props.state.navigate('IssueScreen',{id: id,socket: this.props.state.socket,title: this.props.item.title,showHeader: false,pageCount: this.props.item.link[3]['pse:count']})}>
-            <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.link[0].href}} style={{height: 277,width:180,flex: 1}}/>
-          </CardItem>
-          </TouchableOpacity>
-
-      </Card>
-    )
-  }
-}
-}
 class MyInternalSingleItem extends React.PureComponent{
   render(){
     return (
@@ -87,7 +35,7 @@ class MyInternalSingleItem extends React.PureComponent{
 
 class MyListItem extends React.PureComponent {
   bookIssues = ({item, index}) => (
-    <MyInternalItem item={item} state = {this.props.state} />
+    <MultipleIssueBook item={item} state = {this.props.state} />
   );
   singleBookIssue = ({item, index}) => (
     <MyInternalSingleItem item={item} state={this.props.state} />
@@ -157,7 +105,7 @@ class MyListItem extends React.PureComponent {
 }
 class MyListItem2 extends React.PureComponent {
   bookIssues = ({item, index}) => (
-    <MyInternalItem item={item} state = {this.props.state} />
+    <MultipleIssueBook item={item} state = {this.props.state} />
   );
   singleBookIssue = ({item, index}) => (
     <MyInternalSingleItem item={item} state={this.props.state} />
