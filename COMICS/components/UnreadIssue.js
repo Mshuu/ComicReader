@@ -11,6 +11,7 @@ import { Card, CardItem} from 'native-base';
 export class UnreadIssue extends React.PureComponent {
 
     _CardOnPress = () => {
+        console.log("Pressed");
         this.state.navigate('IssueScreen',{
             id: this.state.item.id,
             socket: this.state.socket,
@@ -31,8 +32,8 @@ export class UnreadIssue extends React.PureComponent {
     render(){
         return (
             <Card>
-                <TouchableOpacity  onPress={() => this._CardOnPress}>
-                    <CardItem cardBody button onPress={() => this._CardOnPress}>
+                <TouchableOpacity  onPress={() => this._CardOnPress()}>
+                    <CardItem cardBody button onPress={() => this._CardOnPress()}>
                         <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.state.item.link[0].href}} style={{height: 277,width:180,flex: 1}}/>
                     </CardItem>
                 </TouchableOpacity>
