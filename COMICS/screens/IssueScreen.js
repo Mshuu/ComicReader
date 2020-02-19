@@ -20,6 +20,7 @@ import { Container, Header, Content, Card, CardItem, Body, Row } from 'native-ba
 import { MonoText } from '../components/StyledText';
 import { FlatList } from 'react-native-gesture-handler';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { IssuePage } from '../components/IssuePage';
 
 //TODO: Refactor this whole screen, has a mix of components and classes and functions and a whole bunch of stuff
 export default class IssueScreen extends Component {
@@ -207,52 +208,16 @@ export default class IssueScreen extends Component {
         } else {
             if (!this.state.vertical){
             return (
-              <ScrollView ref='_scrollView' style={{paddingBottom: 40}} contentContainerStyle={{flexGrow:1}} minimumZoomScale={1} maximumZoomScale={5}>
-                              <ScrollView ref='_scrollView' style={{paddingBottom: 40}} contentContainerStyle={{flexGrow:1}} minimumZoomScale={1} maximumZoomScale={5} horizontal={true}>
-                              <TouchableHighlight   onPress={(evt) => {
-                                         const {
-                                          // Location (x,y) is relative to
-                                          // the top-left of the component
-                                          locationX,
-                                          locationY,
-                              
-                                          // Page (x,y) is relative to
-                                          // the top-left of the device screen
-                                          pageX,
-                                          pageY,
-                                      } = evt.nativeEvent;
-                  if (pageX < 80){
-                      let page = this.state.page;
-                      page = page - 1;
-                      this.setState({
-                          page: page
-                      });
-                      this.updateSavedPage();
-                      this.refs._scrollView.scrollTo({x:0,y:0,animated:true});
-                  } else if (pageX > (Dimensions.get('window').width - 80)){
-                      let page = this.state.page;
-                      page = page + 1;
-                      this.setState({
-                          page: page
-                      });
-                      this.updateSavedPage();
-                      this.refs._scrollView.scrollTo({x:0,y:0,animated:true});
-                  } else 
-                  if (this.state.headerShown){
-                      this.props.navigation.setParams({ showHeader: false })
-                      this.setState({headerShown: false})
-                  } else {
-                      this.props.navigation.setParams({ showHeader: true })
-                      this.setState({headerShown: true})
-                  }
-                }}>
-                  <Image
-                  style={{ height: this.state.height, width: this.state.width }}
-                  source={{uri: "http://l2.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}
-                  />
-                          </TouchableHighlight>
-          </ScrollView>
-          </ScrollView>
+                /**
+                 *             navigation: this.props.navigation,
+            socket: this.props.socket,
+            headerShown: this.props.headerShown,
+            width: this.props.width,
+            height: this.props.height,
+            id: this.props.id,
+            page: this.props.page
+                 */
+                <IssuePage navigation={this.props.navigation} state={this.state}/>
             );} else {
                 return (
                     <FlatList
