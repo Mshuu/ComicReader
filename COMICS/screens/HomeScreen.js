@@ -16,106 +16,7 @@ import { SearchBar } from 'react-native-elements';
 
 import { MonoText } from '../components/StyledText';
 import { FlatList } from 'react-native-gesture-handler';
-import { MultipleIssueBook } from '../components/MultipleIssueBook';
-import { SingleIssueBook } from '../components/SingleIssueBook';
-
-class MyListItem2 extends React.PureComponent {
-  bookIssues = ({item, index}) => (
-    <MultipleIssueBook item={item} state = {this.props.state} />
-  );
-  singleBookIssue = ({item, index}) => (
-    <MyInternalSingleItem item={item} state={this.props.state} />
-  )
-
-  _onLongPressButton = (id,socket,props) => {
-    console.log(props);
-  }
-
-  render() {
-    if (this.props.item.issueCount > 0){
-    return (
-      <Card transparent>
-      <CardItem>
-      <Text style={{fontWeight:'bold',fontSize: 25,color:'#595957'}}>{this.props.item.title}</Text>
-    </CardItem>
-    <CardItem>
-    <FlatList style={styles.flatList}
-                data={this.props.item.issues}
-                horizontal={true}
-                windowSize={4}
-                initialListSize={4}
-                initialNumToRender={4}
-                maxToRenderPerBatch={4}
-                removeClippedSubviews={true}
-                renderItem={this.bookIssues.bind(this)}
-                keyExtractor={(item, index) => index.toString()} 
-                />
-                </CardItem>
-    </Card>
-  );
-} else {
-  if (this.props.item.issues.page > 0){
-    if (this.props.item.issues.page >=  this.props.item.issues.link[3]['pse:count']){
-      return (
-        <Card transparent>
-          <CardItem>
-          <Text style={{fontWeight:'bold',fontSize: 25,color:'#595957'}}>{this.props.item.title}</Text>
-        </CardItem>
-        <CardItem>
-        <Card button onPress={() => alert("This is a card")}>
-              <TouchableOpacity onLongPress={() => this._onLongPressButton(this.props.item.issues.id,this.props.state.socket,this.props)}  onPress={() => this.props.state.navigate('IssueScreen',{id: this.props.item.issues.id,socket: this.props.state.socket, title: this.props.item.issues.title,showHeader: false,pageCount: this.props.item.issues.link[3]['pse:count']})}>
-              <CardItem cardBody>
-                <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.issues.link[0].href}} style={{height: 277,width:180,opacity: 0.3}}/>
-              </CardItem>
-              </TouchableOpacity>
-          </Card>
-                    </CardItem>
-        </Card>
-        );
-    } else {
-      let tempWidth = (this.props.item.issues.page / this.props.item.issues.link[3]['pse:count']) * 100;
-      return (
-        <Card transparent>
-          <CardItem>
-          <Text style={{fontWeight:'bold',fontSize: 25,color:'#595957'}}>{this.props.item.title}</Text>
-        </CardItem>
-        <CardItem>
-        <Card button onPress={() => alert("This is a card")}>
-              <TouchableOpacity  onLongPress={() => this._onLongPressButton(this.props.item.issues.id,this.props.state.socket)}  onPress={() => this.props.state.navigate('IssueScreen',{id: this.props.item.issues.id,socket: this.props.state.socket, title: this.props.item.issues.title,showHeader: false,pageCount: this.props.item.issues.link[3]['pse:count']})}>
-              <CardItem cardBody>
-                <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.issues.link[0].href}} style={{height: 277,width:180}}/>
-              </CardItem>
-              </TouchableOpacity>
-              <View style={styles.progressBar}>
-              <View style={[StyleSheet.absoluteFill], {backgroundColor: "#8BED4F", width: "" + tempWidth + "%", maxWidth: 180 }}></View>
-              </View>
-          </Card>
-                    </CardItem>
-        </Card>
-        );
-    }
-
-  } else {
-  return (
-    <Card transparent>
-      <CardItem>
-      <Text style={{fontWeight:'bold',fontSize: 25,color:'#595957'}}>{this.props.item.title}</Text>
-    </CardItem>
-    <CardItem>
-    <Card button onPress={() => alert("This is a card")}>
-          <TouchableOpacity  onLongPress={() => this._onLongPressButton(this.props.item.issues.id,this.props.state.socket)}  onPress={() => this.props.state.navigate('IssueScreen',{id: this.props.item.issues.id,socket: this.props.state.socket, title: this.props.item.issues.title,showHeader: false,pageCount: this.props.item.issues.link[3]['pse:count']})}>
-          <CardItem cardBody>
-            <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.issues.link[0].href}} style={{height: 277,width:180}}/>
-          </CardItem>
-          </TouchableOpacity>
-      </Card>
-                </CardItem>
-    </Card>
-  );
-  }
-}
-  }
-}
+import { BookList } from '../components/BookList';
 
 export default class HomeScreen extends Component{
 
@@ -287,136 +188,40 @@ export default class HomeScreen extends Component{
   }
 
   _renderItem = ({item, index}) => (
-    <MyListItem item={item} state={this.state}/>
-  );
-  _renderItem2 = ({item, index}) => (
-    <MyListItem2 item={item} state={this.state}/>
+    <BookList item={item} state={this.state}/>
   );
 
   render() {
     const { search } = this.state;
     if (this.state.isLoading){
-    return (
-      <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
-
-          <View style={styles.getStartedContainer}>
-            <DevelopmentModeNotice />
-
-            <Text style={styles.getStartedText}>Get started by opening2</Text>
-
-            <View
-              style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText>screens/HomeScreen.js</MonoText>
-            </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-          </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>
-                Help, it didn’t automatically reload!
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>
-            This is a tab bar. You can edit it in:
-          </Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>
-              navigation/MainTabNavigator.js
-            </MonoText>
-          </View>
+      return (
+        <View>
+          <Text>Loading...</Text>
         </View>
-      </View>
-    );
-            } else {
-              return(
-                <View style={styles.container}>
-                              <SearchBar
-        placeholder="Type Here..."
-        onChangeText={this.searchFilterFunction}
-        lightTheme={true}
-        value={search}
-      />
-                  <FlatList style={styles.flatList}
-                  data={this.state.data}
-                  windowSize={4}
-                initialListSize={4}
-                initialNumToRender={4}
-                maxToRenderPerBatch={4}
-                  removeClippedSubviews={true}
-                  keyExtractor={item => item.id} 
-                  renderItem={this._renderItem2.bind(this)}
-                      />
-                </View>
-              );
-            }
+      );
+    } else {
+      return(
+        <View style={styles.container}>
+          <SearchBar
+          placeholder="Type Here..."
+          onChangeText={this.searchFilterFunction}
+          lightTheme={true}
+          value={search}
+          />
+          <FlatList style={styles.flatList}
+          data={this.state.data}
+          windowSize={4}
+          initialListSize={4}
+          initialNumToRender={4}
+          maxToRenderPerBatch={4}
+          removeClippedSubviews={true}
+          keyExtractor={item => item.id} 
+          renderItem={this._renderItem.bind(this)}
+          />
+        </View>
+      );
+    }
   };
-}
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function BookTitles(){
-
-}
-
-function BookIssues(){
-  return (
-    <Text>"Hi"</Text>
-  )
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
-  );
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
 }
 
 const styles = StyleSheet.create({

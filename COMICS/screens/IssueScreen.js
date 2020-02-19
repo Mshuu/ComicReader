@@ -68,9 +68,6 @@ export default class IssueScreen extends Component {
         try {
             let vert = await AsyncStorage.getItem('vertical') || "false";
             if (vert == "true"){
-                console.log("here");
-                console.log(navigation.getParam('pageCount')) ;
-                console.log("PAGE");
                 let pages = this.state.pages;
                 for (var i = 0; i<navigation.getParam('pageCount') ; i++) {
                     var url = "http://l2.mml2.net:2202/opds-comics/comicreader/" + navigation.getParam('id') + "?page=" + i + "";
@@ -88,7 +85,6 @@ export default class IssueScreen extends Component {
                 });
                 this.flatList.scrollToIndex({ animated: true, index: this.state.page });
             } else {
-                console.log("there");
                 this.setState({
                     vertical: false,
                     isLoading: false,
@@ -102,9 +98,7 @@ export default class IssueScreen extends Component {
             console.log(e);
         }
     }
-    _swapVertical = async () => {
-        console.log("swapping");
-        
+    _swapVertical = async () => {        
         if (this.state.vertical){
             this.setState({vertical: false});
             await AsyncStorage.setItem('vertical','false');
@@ -122,7 +116,6 @@ export default class IssueScreen extends Component {
         }
     }
     onSwipeLeft(gestureState) {
-        console.log("LEFT");
         let page = this.state.page;
         page = page + 1;
         this.setState({
@@ -132,7 +125,6 @@ export default class IssueScreen extends Component {
     }
 
     onSwipeRight(gestureState) {
-        console.log("RIGHT");
         let page = this.state.page;
         page = page - 1;
         this.setState({
@@ -186,8 +178,6 @@ export default class IssueScreen extends Component {
     }
     }
     getPage(page){
-            console.log(page);
-            console.log("GOT READ: %j",page);
             if (parseInt(page)){
             this.setState({
                 page: parseInt(page)
@@ -264,8 +254,6 @@ export default class IssueScreen extends Component {
           </ScrollView>
           </ScrollView>
             );} else {
-                console.log("vert");
-                console.log(this.state.pages);
                 return (
                     <FlatList
                     data={this.state.pages}

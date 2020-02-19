@@ -1,9 +1,7 @@
 import React from 'react';
-import {
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import { Card, CardItem} from 'native-base';
+import { UnreadIssue } from './UnreadIssue';
+import { FinishedIssue } from './FinishedIssue';
+import { UnFinishedIssue } from './UnFinishedIssue';
 
 export class SingleIssueBook extends React.PureComponent{
 
@@ -22,17 +20,22 @@ export class SingleIssueBook extends React.PureComponent{
             item: this.props.item,
             socket: this.props.state.socket,
             navigation: this.props.state.navigation
-        }
+        };
     }
     render(){
-      return (
-        <Card>
-            <TouchableOpacity onPress={() => _this._CardOnPress}>
-                <CardItem cardBody>
-                    <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.link[0].href}} style={{height: 277,width:180,flex: 1}}/>
-                </CardItem>
-            </TouchableOpacity>
-        </Card>
-      )
+        if (this.state.item.page > 0 && this.state.item.page >= this.state.item.link[3]['pse:count']){
+            return (
+                <FinishedIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate}/>
+            );
+        }
+        if (this.state.item.page > 0 && this.state.item.page < this.state.item.link[3]['pse:count']){
+            return(
+                <UnFinishedIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate}/>
+            );
+        }
+        return (
+            <UnreadIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate}/>
+        );
     }
   }
+

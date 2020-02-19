@@ -19,7 +19,6 @@ export class MultipleIssueBook extends React.PureComponent{
             navigate: props.state.navigate
         };
     }
-
     render() {
         if (this.state.item.page > 0 && this.state.item.page >= this.state.item.link[3]['pse:count']){
             return (
