@@ -15,6 +15,7 @@ export default class HomeScreen extends Component {
   constructor(props){
     super(props);
     const socket = io('http://l2.mml2.net:3000', {transports: ['websocket']});
+    const {navigate} = this.props.navigation
     this.state = {
       isLoading: true,
       isConnected: false,
@@ -23,7 +24,7 @@ export default class HomeScreen extends Component {
       books: [],
       data: [],
       search: "",
-      navigate: this.props.navigation,
+      navigate: navigate,
       socket: socket
 
     };
@@ -47,7 +48,7 @@ export default class HomeScreen extends Component {
         });
 
         this.state.socket.on('GotHome', data => {
-            this.HandleHome(data, socket);
+            this.HandleHome(data, this.state.socket);
         });
         this.state.socket.on("GotReads", data => {
             this.HandleReads(data);
@@ -60,7 +61,7 @@ export default class HomeScreen extends Component {
 
         this.props.navigation.addListener('didFocus', () => {
                 if (this.state.isLoading == false) {
-                    socket.emit("GetHome", "mg");
+                    this.state.socket.emit("GetHome", "mg");
                 }
             });
 
@@ -123,15 +124,18 @@ export default class HomeScreen extends Component {
                             let books = this.state.books;
                             books[x].issues[y].page = data[i].page;
                             this.setState({books: books, data: books, gotReads: true});
+                            this.forceUpdate();
                         } else {}
                     }
                 } else {
                     if (this.state.books[x].issues.id == parseInt(data[i].issueId)) {
+                      console.log("Found read");
                         let books = this.state.books;
                         books[x].issues.page = data[i].page;
                         this.setState({books: books, data: books, gotReads: true});
-                        this.forceUpdate();
-                    } else {}
+                        this.forceUpdate()
+                    } else {
+                    }
                 }
             }
         }
@@ -166,29 +170,33 @@ export default class HomeScreen extends Component {
                     <Text>Loading...</Text>
                 </View>
             );
-        } else {
-            return (
-                <View style={styles.container}>
-                    <SearchBar
-                        placeholder="Type Here..."
-                        onChangeText={this.searchFilterFunction}
-                        lightTheme={true}
-                        value={search}/>
-                    <FlatList
-                        style={styles.flatList}
-                        data={this.state.data}
-                        windowSize={4}
-                        initialListSize={4}
-                        initialNumToRender={4}
-                        maxToRenderPerBatch={4}
-                        removeClippedSubviews={true}
-                        keyExtractor={item => item.id}
-                        renderItem={this
-                        ._renderItem
-                        .bind(this)}/>
-                </View>
-            );
         }
+        if (this.state.gotReads){
+          return (
+            <View style={styles.container}>
+                <SearchBar
+                    placeholder="Type Here..."
+                    onChangeText={this.searchFilterFunction}
+                    lightTheme={true}
+                    value={search}/>
+                <FlatList
+                    style={styles.flatList}
+                    data={this.state.data}
+                    windowSize={4}
+                    initialListSize={4}
+                    initialNumToRender={4}
+                    maxToRenderPerBatch={4}
+                    removeClippedSubviews={true}
+                    keyExtractor={item => item.id}
+                    renderItem={this
+                    ._renderItem
+                    .bind(this)}/>
+            </View>
+        );
+      }
+      return (
+        <View><Text>Loading reads...</Text></View>
+      )
     };
 }
 
