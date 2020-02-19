@@ -1,7 +1,5 @@
 import React from 'react';
-import { UnreadIssue } from './UnreadIssue';
-import { FinishedIssue } from './FinishedIssue';
-import { UnFinishedIssue } from './UnFinishedIssue';
+import { UnreadIssue, FinishedIssue, UnFinishedIssue } from './IssueComponent';
 
 export class SingleIssueBook extends React.PureComponent{
 

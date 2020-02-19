@@ -6,9 +6,7 @@ import {
   View,
 } from 'react-native';
 import { Card, CardItem} from 'native-base';
-import { UnreadIssue } from './UnreadIssue';
-import { FinishedIssue } from './FinishedIssue';
-import { UnFinishedIssue } from './UnFinishedIssue';
+import { UnreadIssue, FinishedIssue, UnFinishedIssue } from './IssueComponent';
 
 export class MultipleIssueBook extends React.PureComponent{
     constructor(props){
