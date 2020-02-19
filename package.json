@@ -2,7 +2,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "start expo start COMICS && start node ComicBackend/src/index.js",
-    "build": "npm-run-all clean transpile",
+    "build": "cd COMICS && expo build:web",
     "server": "start node ./ComicBackend/dist/index.js",
     "dev": "npm-run-all build server",
     "prod": "NODE_ENV=production npm-run-all build server",
