@@ -72,7 +72,7 @@ export class IssuePage extends React.PureComponent{
                 <ScrollView ref='_scrollView' style={{paddingBottom: 40}} contentContainerStyle={{flexGrow:1}} minimumZoomScale={1} maximumZoomScale={5} horizontal={true}>
                     <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
                         <Image style={{ height: this.state.height, width: this.state.width }}
-                        source={{uri: "http://l2.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
+                        source={{uri: "http://l2.mml2.net:2053/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
                     </TouchableHighlight>
                 </ScrollView>
             </ScrollView>

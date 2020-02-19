@@ -51,7 +51,7 @@ export default class IssueScreen extends Component {
         socket.on('GotSpecificRead', data => {
            this.getPage(data);
           });
-        Image.getSize("http://l2.mml2.net:2202/opds-comics/comicreader/2141?page=3&width=" + Dimensions.get('window').width, (width, height) => {
+        Image.getSize("http://l2.mml2.net:2053/opds-comics/comicreader/2141?page=3&width=" + Dimensions.get('window').width, (width, height) => {
             if (this.props.width && !this.props.height) {
                 this.checkVertical(this.props.width,height * (this.props.width / width),navigation);
             } else if (!this.props.width && this.props.height) {
@@ -71,7 +71,7 @@ export default class IssueScreen extends Component {
             if (vert == "true"){
                 let pages = this.state.pages;
                 for (var i = 0; i<navigation.getParam('pageCount') ; i++) {
-                    var url = "http://l2.mml2.net:2202/opds-comics/comicreader/" + navigation.getParam('id') + "?page=" + i + "";
+                    var url = "http://l2.mml2.net:2053/opds-comics/comicreader/" + navigation.getParam('id') + "?page=" + i + "";
                     pages.push(url);
                 }
                 this.setState({
@@ -107,7 +107,7 @@ export default class IssueScreen extends Component {
             this.setState({vertical: true});
             await AsyncStorage.setItem('vertical','true');
             for (var i = 0; i<this.state.pageCount; i++) {
-                var url = "http://l2.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + i + "";
+                var url = "http://l2.mml2.net:2053/opds-comics/comicreader/" + this.state.id + "?page=" + i + "";
                 let pages = this.state.pages;
                 pages.push(url);
                 this.setState({
