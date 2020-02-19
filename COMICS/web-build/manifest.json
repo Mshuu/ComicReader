@@ -4,11 +4,11 @@
   "dir": "auto",
   "display": "standalone",
   "lang": "en",
-  "name": "ComicTester",
+  "name": "ComicTester2",
   "orientation": "portrait",
   "prefer_related_applications": true,
   "related_applications": [],
-  "short_name": "ComicTester",
+  "short_name": "ComicTester2",
   "start_url": ".",
   "icons": [
     {
