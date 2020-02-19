@@ -8,7 +8,7 @@ import {
 import { Card, CardItem} from 'native-base';
 
 
-export class FinishedIssue extends React.PureComponent {
+export class UnFinishedIssue extends React.PureComponent {
 
     _CardOnPress = () => {
         this.state.navigate('IssueScreen',{

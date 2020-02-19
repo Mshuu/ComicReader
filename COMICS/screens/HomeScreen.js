@@ -17,92 +17,8 @@ import { SearchBar } from 'react-native-elements';
 import { MonoText } from '../components/StyledText';
 import { FlatList } from 'react-native-gesture-handler';
 import { MultipleIssueBook } from '../components/MultipleIssueBook';
+import { SingleIssueBook } from '../components/SingleIssueBook';
 
-
-class MyInternalSingleItem extends React.PureComponent{
-  render(){
-    return (
-      <Card button onPress={() => alert("This is a card")}>
-          <TouchableOpacity   onLongPress={() => this._onLongPressButton(this.props.item.id)} onPress={() => this.props.state.navigate('IssueScreen',{id: this.props.item.id,socket: this.props.state.socket, title: this.props.item.title,showHeader: false,pageCount: this.props.item.link[3]['pse:count']})}>
-          <CardItem cardBody>
-            <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.link[0].href}} style={{height: 277,width:180,flex: 1}}/>
-          </CardItem>
-          </TouchableOpacity>
-      </Card>
-    )
-  }
-}
-
-class MyListItem extends React.PureComponent {
-  bookIssues = ({item, index}) => (
-    <MultipleIssueBook item={item} state = {this.props.state} />
-  );
-  singleBookIssue = ({item, index}) => (
-    <MyInternalSingleItem item={item} state={this.props.state} />
-  )
-  _onLongPressButton = (id) => {
-    console.log("long pressed" + id);
-  }
-
-  render() {
-    if (this.props.item.issueCount > 0){
-    return (
-      <Card transparent>
-      <CardItem>
-      <Text style={{fontWeight:'bold',fontSize: 25,color:'#595957'}}>{this.props.item.title}</Text>
-    </CardItem>
-    <CardItem>
-    <FlatList style={styles.flatList}
-                data={this.props.item.issues}
-                horizontal={true}
-                windowSize={4}
-                initialListSize={4}
-                initialNumToRender={4}
-                maxToRenderPerBatch={4}
-                removeClippedSubviews={true}
-                renderItem={this.bookIssues.bind(this)}
-                keyExtractor={(item, index) => index.toString()} 
-                />
-                </CardItem>
-    </Card>
-  );
-} else {
-  if (this.props.item.issues.page > 0){
-    <Card transparent>
-      <CardItem>
-      <Text style={{fontWeight:'bold',fontSize: 50,color:'#595957'}}>{this.props.item.title}</Text>
-    </CardItem>
-    <CardItem>
-    <Card button onPress={() => alert("This is a card")}>
-          <TouchableOpacity  onLongPress={() => this._onLongPressButton(this.props.item.issues.id)} onPress={() => this.props.state.navigate('IssueScreen',{id: this.props.item.issues.id,socket: this.props.state.socket, title: this.props.item.issues.title,showHeader: false,pageCount: this.props.item.issues.link[3]['pse:count']})}>
-          <CardItem cardBody>
-            <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.issues.link[0].href}} style={{height: 277,width:180}}/>
-          </CardItem>
-          </TouchableOpacity>
-      </Card>
-                </CardItem>
-    </Card>
-  } else {
-  return (
-    <Card transparent>
-      <CardItem>
-      <Text style={{fontWeight:'bold',fontSize: 25,color:'#595957'}}>{this.props.item.title}</Text>
-    </CardItem>
-    <CardItem>
-    <Card button onPress={() => alert("This is a card")}>
-          <TouchableOpacity onLongPress={() => this._onLongPressButton(this.props.item.issues.id)}  onPress={() => this.props.state.navigate('IssueScreen',{id: this.props.item.issues.id,socket: this.props.state.socket, title: this.props.item.issues.title,showHeader: false,pageCount: this.props.item.issues.link[3]['pse:count']})}>
-          <CardItem cardBody>
-            <Image resizeMode={'contain'} source={{uri: "http://l2.mml2.net:2202" + this.props.item.issues.link[0].href}} style={{height: 277,width:180}}/>
-          </CardItem>
-          </TouchableOpacity>
-      </Card>
-                </CardItem>
-    </Card>
-  );
-  }
-}
-  }
-}
 class MyListItem2 extends React.PureComponent {
   bookIssues = ({item, index}) => (
     <MultipleIssueBook item={item} state = {this.props.state} />
@@ -434,27 +350,6 @@ export default class HomeScreen extends Component{
         </View>
       </View>
     );
-            } else if (!this.state.gotReads) {
-              return(
-                <View style={styles.container}>
-                              <SearchBar
-        placeholder="Type Here..."
-        onChangeText={this.searchFilterFunction}
-        lightTheme={true}
-        value={search}
-      />
-                  <FlatList style={styles.flatList}
-                  data={this.state.data}
-                  windowSize={4}
-initialListSize={4}
-initialNumToRender={4}
-maxToRenderPerBatch={4}
-                  removeClippedSubviews={true}
-                  keyExtractor={item => item.title} 
-                  renderItem={this._renderItem.bind(this)}
-                      />
-                </View>
-              );
             } else {
               return(
                 <View style={styles.container}>
