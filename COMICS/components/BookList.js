@@ -54,7 +54,7 @@ export class BookList extends React.PureComponent {
                 <Text style={{fontWeight:'bold',fontSize: 25,color:'#595957'}}>{this.props.item.title}</Text>
             </CardItem>
             <CardItem>
-                <SingleIssueBook item={this.state.item.issues} state={this.state} />
+                <SingleIssueBook item={this.state.item.issues} state={this.props.state} />
             </CardItem>
          </Card>
         );

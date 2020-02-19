@@ -11,7 +11,7 @@ import { Card, CardItem} from 'native-base';
 export class UnreadIssue extends React.PureComponent {
 
     _CardOnPress = () => {
-        console.log("Pressed");
+        console.log(this.state);
         this.state.navigate('IssueScreen',{
             id: this.state.item.id,
             socket: this.state.socket,

@@ -5,21 +5,12 @@ import { UnFinishedIssue } from './UnFinishedIssue';
 
 export class SingleIssueBook extends React.PureComponent{
 
-    _CardOnPress = () => {
-        this.state.navigate('IssueScreen',{
-            id: this.state.item.id,
-            socket: this.state.socket,
-            title: this.state.item.title,
-            showHeader: false,
-            pageCount: this.props.item.link[3]['pse:count']
-        });
-    }
     constructor(props){
         super(props)
         this.state = {
-            item: this.props.item,
-            socket: this.props.state.socket,
-            navigation: this.props.state.navigation
+            item: props.item,
+            socket: props.state.socket,
+            navigate: props.state.navigate
         };
     }
     render(){
@@ -34,7 +25,7 @@ export class SingleIssueBook extends React.PureComponent{
             );
         }
         return (
-            <UnreadIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate}/>
+            <UnreadIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate} s/>
         );
     }
   }
