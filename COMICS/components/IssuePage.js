@@ -44,7 +44,7 @@ export class IssuePage extends React.PureComponent{
             this._resetScroll();
         } else if (pageX > (Dimensions.get('window').width - 80)){
             this._updatePage(this.state.page + 1);
-            this.updateSavedPage();
+            this._updateSavedPage();
             this._resetScroll();
         } else if (this.state.headerShown){
             this.props.navigation.setParams({ showHeader: false })
