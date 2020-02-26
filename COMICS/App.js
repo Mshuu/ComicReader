@@ -8,10 +8,20 @@ import AppNavigator from './navigation/AppNavigator';
 import { Container, Text } from 'native-base';
 import SocketContext from './components/socket-context';
 import io from 'socket.io-client';
-
+import { YellowBox } from 'react-native';
+import _ from 'lodash';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
+  
+  YellowBox.ignoreWarnings(['Setting a timer']);
+  const _console = _.clone(console);
+  console.warn = message => {
+    if (message.indexOf('Setting a timer') <= -1) {
+      _console.warn(message);
+    }
+  };
+
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (

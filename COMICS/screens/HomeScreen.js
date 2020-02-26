@@ -14,7 +14,7 @@ import {BookList} from '../components/BookList';
 export default class HomeScreen extends Component {
   constructor(props){
     super(props);
-    const socket = io('http://opds.mml2.net:3000', {transports: ['websocket']});
+    const socket = io('http://opds.mml2.net:3000', {transports: ['websocket'], pingTimeout: 30000});
     const {navigate} = this.props.navigation
     this.state = {
       isLoading: true,

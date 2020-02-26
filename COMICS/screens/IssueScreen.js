@@ -208,15 +208,6 @@ export default class IssueScreen extends Component {
         } else {
             if (!this.state.vertical){
             return (
-                /**
-                 *             navigation: this.props.navigation,
-            socket: this.props.socket,
-            headerShown: this.props.headerShown,
-            width: this.props.width,
-            height: this.props.height,
-            id: this.props.id,
-            page: this.props.page
-                 */
                 <IssuePage navigation={this.props.navigation} state={this.state}/>
             );} else {
                 return (

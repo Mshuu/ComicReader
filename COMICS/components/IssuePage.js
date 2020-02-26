@@ -7,6 +7,7 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
+    ImageBackground,
     Dimensions,
     TouchableHighlight,
     AsyncStorage,
@@ -35,6 +36,14 @@ export class IssuePage extends React.PureComponent{
     }
     _resetScroll = () => {
         this.refs._scrollView.scrollTo({x:0,y:0,animated:true});
+    }
+    _isPortrait = () => {
+        if (Dimensions.get('window').width > Dimensions.get('window').height){
+            this.setState({portrait: true});
+        }
+        else if (Dimensions.get('window').height > Dimensions.get('window').width){
+            this.setState({portrait: false});
+        }
     }
     _clickedPage = (evt) => {
         const { pageX } = evt.nativeEvent;
@@ -66,16 +75,48 @@ export class IssuePage extends React.PureComponent{
             page: this.props.state.page
         }
     }
+    _orientationChanged = () => {
+        this.setState({
+            width: Dimensions.get('window').width,
+            height: Dimensions.get('window').height
+        })
+        this._isPortrait();
+    }
+    _updateImageHeight = () => {
+        Image.getSize("http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", (width, height) => 
+        {this.setState({imageHeight: height, imageWidth: width})});
+    }
+    componentDidMount(){
+        this._orientationChanged();
+        Dimensions.addEventListener('change', () => {
+            this._orientationChanged();
+        });
+        this._updateImageHeight();
+    }
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change');
+    }
     render(){
+        if (!this.state.portrait){
         return(
-            <ScrollView ref='_scrollView' style={{paddingBottom: 40}} contentContainerStyle={{flexGrow:1}} minimumZoomScale={1} maximumZoomScale={5}>
-                <ScrollView ref='_scrollView' style={{paddingBottom: 40}} contentContainerStyle={{flexGrow:1}} minimumZoomScale={1} maximumZoomScale={5} horizontal={true}>
-                    <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
-                        <Image style={{ height: this.state.height, width: this.state.width }}
-                        source={{uri: "http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
-                    </TouchableHighlight>
-                </ScrollView>
-            </ScrollView>
-        )
+            <ScrollView ref='_scrollView' contentContainerStyle={{alignItems: 'center'}} minimumZoomScale={1} maximumZoomScale={10}>
+                <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
+                    <Image style={{height: this.state.height,width: this.state.width,resizeMode:'contain',flex: 1}}
+                    source={{uri: "http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
+                </TouchableHighlight>
+          </ScrollView>
+        );
+        }
+        if (this.state.portrait){
+            return(
+            <ScrollView ref='_scrollView' contentContainerStyle={{alignItems: 'center'}} minimumZoomScale={1} maximumZoomScale={10}>
+            <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
+                <Image style={{height: this.state.imageHeight,width: this.state.width,resizeMode:'stretch',flex: 1}}
+                source={{uri: "http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
+            </TouchableHighlight>
+      </ScrollView> 
+            )
+        }
+
     }
 }
