@@ -10,12 +10,17 @@ import io from 'socket.io-client';
 import {SearchBar} from 'react-native-elements';
 import {FlatList} from 'react-native-gesture-handler';
 import {BookList} from '../components/BookList';
+import { connect } from 'react-redux';
 
-export default class HomeScreen extends Component {
+const mapStateToProps = (state) => {
+    return state;
+}
+
+class HomeScreen extends Component {
   constructor(props){
     super(props);
     const socket = io('http://opds.mml2.net:3000', {transports: ['websocket'], pingTimeout: 30000});
-    const {navigate} = this.props.navigation
+    const {navigate} = this.props.navigation;
     this.state = {
       isLoading: true,
       isConnected: false,
@@ -63,8 +68,7 @@ export default class HomeScreen extends Component {
                 if (this.state.isLoading == false) {
                     this.state.socket.emit("GetHome", "mg");
                 }
-            });
-
+        });
     }
 
     renderHeader = () => {
@@ -322,3 +326,6 @@ const styles = StyleSheet.create({
         minWidth: 300
     }
 });
+
+  
+export default connect(mapStateToProps)(HomeScreen)

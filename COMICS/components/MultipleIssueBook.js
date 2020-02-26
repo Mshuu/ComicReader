@@ -7,8 +7,13 @@ import {
 } from 'react-native';
 import { Card, CardItem} from 'native-base';
 import { UnreadIssue, FinishedIssue, UnFinishedIssue } from './IssueComponent';
+import { connect } from 'react-redux';
 
-export class MultipleIssueBook extends React.PureComponent{
+const mapStateToProps = (state) => {
+    return state;
+}
+
+class MultipleIssueBook extends React.PureComponent{
     constructor(props){
         super(props);
         this.state = {
@@ -20,16 +25,18 @@ export class MultipleIssueBook extends React.PureComponent{
     render() {
         if (this.state.item.page > 0 && this.state.item.page >= this.state.item.link[3]['pse:count']){
             return (
-                <FinishedIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate}/>
+                <FinishedIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate} opds={this.props.opds}/>
             );
         }
         if (this.state.item.page > 0 && this.state.item.page < this.state.item.link[3]['pse:count']){
             return(
-                <UnFinishedIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate}/>
+                <UnFinishedIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate} opds={this.props.opds}/>
             );
         }
         return (
-            <UnreadIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate}/>
+            <UnreadIssue item={this.state.item} socket={this.state.socket} navigate={this.state.navigate} opds={this.props.opds}/>
         );
     }
 }
+
+export default connect(mapStateToProps)(MultipleIssueBook)

@@ -16,14 +16,19 @@ import {
 } from 'react-native';
 import io from 'socket.io-client';
 import { Container, Header, Content, Card, CardItem, Body, Row } from 'native-base';
+import { connect } from 'react-redux';
+
 
 import { MonoText } from '../components/StyledText';
 import { FlatList } from 'react-native-gesture-handler';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { IssuePage } from '../components/IssuePage';
 
+const mapStateToProps = (state) => {
+    return state;
+}
 //TODO: Refactor this whole screen, has a mix of components and classes and functions and a whole bunch of stuff
-export default class IssueScreen extends Component {
+class IssueScreen extends Component {
     state = {
         page: 0,
         isLoading: true,
@@ -51,7 +56,7 @@ export default class IssueScreen extends Component {
         socket.on('GotSpecificRead', data => {
            this.getPage(data);
           });
-        Image.getSize("http://opds.mml2.net:2202/opds-comics/comicreader/2141?page=3&width=" + Dimensions.get('window').width, (width, height) => {
+        Image.getSize(this.props.opds + "/opds-comics/comicreader/2141?page=3&width=" + Dimensions.get('window').width, (width, height) => {
             if (this.props.width && !this.props.height) {
                 this.checkVertical(this.props.width,height * (this.props.width / width),navigation);
             } else if (!this.props.width && this.props.height) {
@@ -71,7 +76,7 @@ export default class IssueScreen extends Component {
             if (vert == "true"){
                 let pages = this.state.pages;
                 for (var i = 0; i<navigation.getParam('pageCount') ; i++) {
-                    var url = "http://opds.mml2.net:2202/opds-comics/comicreader/" + navigation.getParam('id') + "?page=" + i + "";
+                    var url = this.props.opds + "/opds-comics/comicreader/" + navigation.getParam('id') + "?page=" + i + "";
                     pages.push(url);
                 }
                 this.setState({
@@ -107,7 +112,7 @@ export default class IssueScreen extends Component {
             this.setState({vertical: true});
             await AsyncStorage.setItem('vertical','true');
             for (var i = 0; i<this.state.pageCount; i++) {
-                var url = "http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + i + "";
+                var url = this.props.opds + "/opds-comics/comicreader/" + this.state.id + "?page=" + i + "";
                 let pages = this.state.pages;
                 pages.push(url);
                 this.setState({
@@ -200,7 +205,7 @@ export default class IssueScreen extends Component {
         } else {
             if (!this.state.vertical){
             return (
-                <IssuePage navigation={this.props.navigation} state={this.state}/>
+                <IssuePage navigation={this.props.navigation} state={this.state} opds={this.props.opds}/>
             );} else {
                 return (
                     <FlatList
@@ -225,3 +230,5 @@ export default class IssueScreen extends Component {
         }
     }
 }
+
+export default connect(mapStateToProps)(IssueScreen)

@@ -9,8 +9,8 @@ import {
 import { Card, CardItem } from 'native-base';
 
 import { FlatList } from 'react-native-gesture-handler';
-import { MultipleIssueBook } from '../components/MultipleIssueBook';
-import { SingleIssueBook } from '../components/SingleIssueBook';
+import MultipleIssueBook from '../components/MultipleIssueBook';
+import SingleIssueBook from '../components/SingleIssueBook';
 
 export class BookList extends React.PureComponent {
     bookIssues = ({item, index}) => (

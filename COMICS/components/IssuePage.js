@@ -98,7 +98,7 @@ export class IssuePage extends React.PureComponent{
         try{
             const maximumPages = parseInt(this.state.pageCount) + 1;
             for (var i=1;i<maximumPages + 1;i++){
-                await Image.prefetch("http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + i + "");
+                await Image.prefetch(this.props.opds + "/opds-comics/comicreader/" + this.state.id + "?page=" + i + "");
                 if (i == 1){
                     this.setState({loading: false});
                 }
@@ -123,7 +123,7 @@ export class IssuePage extends React.PureComponent{
             <ScrollView ref='_scrollView' contentContainerStyle={{alignItems: 'center'}} minimumZoomScale={1} maximumZoomScale={10}>
                 <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
                     <Image style={{height: this.state.height,width: this.state.width,resizeMode:'contain',flex: 1}}
-                    source={{uri: "http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
+                    source={{uri: this.props.opds + "/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
                 </TouchableHighlight>
           </ScrollView>
         );
@@ -133,7 +133,7 @@ export class IssuePage extends React.PureComponent{
             <ScrollView ref='_scrollView' contentContainerStyle={{alignItems: 'center'}} minimumZoomScale={1} maximumZoomScale={10}>
             <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
                 <Image style={{height: this.state.width * this.state.aspect,width: this.state.width,resizeMode:'cover',flex: 1}}
-                source={{uri: "http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
+                source={{uri: this.props.opds + "/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
             </TouchableHighlight>
       </ScrollView> 
             )

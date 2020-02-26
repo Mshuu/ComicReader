@@ -36,7 +36,7 @@ export class UnFinishedIssue extends React.PureComponent {
                 <Card>
                     <TouchableOpacity  onPress={() => this._CardOnPress()}>
                         <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                            <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issue}/>
+                            <Image resizeMode={'contain'} source={{uri: this.props.opds + this.state.item.link[0].href}} style={styles.issue}/>
                         </CardItem>
                     </TouchableOpacity>
                 </Card>
@@ -73,7 +73,7 @@ export class UnreadIssue extends React.PureComponent {
                 <Card>
                 <TouchableOpacity  onPress={() => this._CardOnPress()}>
                     <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                        <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issue}/>
+                        <Image resizeMode={'contain'} source={{uri: this.props.opds + this.state.item.link[0].href}} style={styles.issue}/>
                     </CardItem>
                 </TouchableOpacity>
             </Card>
@@ -107,7 +107,7 @@ export class FinishedIssue extends React.PureComponent {
                 <Card>
                     <TouchableOpacity onPress={() => this._CardOnPress()}>
                         <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                            <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issueFinished}/>
+                            <Image resizeMode={'contain'} source={{uri: this.props.opds + this.state.item.link[0].href}} style={styles.issueFinished}/>
                         </CardItem>
                     </TouchableOpacity>
                 </Card>

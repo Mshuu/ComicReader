@@ -5,12 +5,11 @@ import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
-import { Container, Text } from 'native-base';
-import SocketContext from './components/socket-context';
-import io from 'socket.io-client';
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
-
+import { Provider } from 'react-redux';
+import { createStore } from 'redux'
+import { stateReducer } from './reducers/stateReducer';
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   
@@ -21,6 +20,8 @@ export default function App(props) {
       _console.warn(message);
     }
   };
+  
+  const store = createStore(stateReducer)
 
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
@@ -33,10 +34,12 @@ export default function App(props) {
     );
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <AppNavigator store={store}/>
+        </View>
+      </Provider>
     );
   }
 }
