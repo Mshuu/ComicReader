@@ -32,7 +32,13 @@ export class IssuePage extends React.PureComponent{
         }
     }
     _updatePage = (newPage) => {
-        this.setState({ page: newPage })
+        if (newPage < 0){
+            this.setState({ page: 0 })
+        } else if (newPage >= this.state.pageCount){
+            this.setState({ page: pageCount - 1 })
+        } else {
+            this.setState({ page: newPage })
+        }
     }
     _resetScroll = () => {
         this.refs._scrollView.scrollTo({x:0,y:0,animated:true});
@@ -74,6 +80,7 @@ export class IssuePage extends React.PureComponent{
             id: this.props.state.id,
             page: this.props.state.page,
             pageCount: this.props.state.pageCount,
+            aspect: 1.5372233400402415,
             loading: true
         }
     }
@@ -84,23 +91,18 @@ export class IssuePage extends React.PureComponent{
         })
         this._isPortrait();
     }
-    _updateImageHeight = () => {
-        Image.getSize("http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", (width, height) => 
-        {this.setState({imageHeight: height, imageWidth: width, aspect: height/width})});
-    }
     componentDidMount(){
         this._orientationChanged();
         Dimensions.addEventListener('change', () => {
             this._orientationChanged();
         });
-        this._updateImageHeight();
         this._preFetchImages();
+        this._updatePage(this.state.page);
     }
     _preFetchImages = async() => {
         try{
             const maximumPages = parseInt(this.state.pageCount) + 1;
             for (var i=1;i<maximumPages + 1;i++){
-                console.log(i);
                 await Image.prefetch("http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + i + "");
                 if (i == 1){
                     this.setState({loading: false});
