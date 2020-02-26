@@ -1,26 +1,14 @@
-import * as WebBrowser from 'expo-web-browser';
-import React, { Component } from 'react';
+
+import React from 'react';
 import {
     Image,
-    Platform,
     ScrollView,
-    StyleSheet,
     Text,
-    TouchableOpacity,
-    ImageBackground,
     Dimensions,
     TouchableHighlight,
-    AsyncStorage,
-    Button,
+    ActivityIndicator,
     View,
-    StatusBar
 } from 'react-native';
-import io from 'socket.io-client';
-import { Container, Header, Content, Card, CardItem, Body, Row } from 'native-base';
-
-import { MonoText } from '../components/StyledText';
-import { FlatList } from 'react-native-gesture-handler';
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 export class IssuePage extends React.PureComponent{
 
