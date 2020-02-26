@@ -7,6 +7,7 @@ import {
     Dimensions,
     TouchableHighlight,
     ActivityIndicator,
+    StyleSheet,
     View,
 } from 'react-native';
 
@@ -112,7 +113,9 @@ export class IssuePage extends React.PureComponent{
     render(){
         if (this.state.loading){
             return(
-                <View><Text>Loading</Text></View>
+                <View style={[styles.container, styles.horizontal]}>
+                <ActivityIndicator size="large" color="#0000ff" />
+              </View>
             )
         }
         if (!this.state.portrait && !this.state.loading){
@@ -138,3 +141,14 @@ export class IssuePage extends React.PureComponent{
 
     }
 }
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+    },
+    horizontal: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      padding: 10,
+    },
+  });

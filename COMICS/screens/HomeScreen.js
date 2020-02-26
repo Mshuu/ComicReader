@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {
     Platform,
     StyleSheet,
-    Text,
     AsyncStorage,
+    ActivityIndicator,
     View
 } from 'react-native';
 import io from 'socket.io-client';
@@ -166,9 +166,9 @@ export default class HomeScreen extends Component {
         const {search} = this.state;
         if (this.state.isLoading) {
             return (
-                <View>
-                    <Text>Loading...</Text>
-                </View>
+                <View style={[styles.container, styles.horizontal]}>
+                <ActivityIndicator size="large" color="#0000ff" />
+              </View>
             );
         }
         if (this.state.gotReads){
@@ -195,7 +195,9 @@ export default class HomeScreen extends Component {
         );
       }
       return (
-        <View><Text>Loading reads...</Text></View>
+        <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
       )
     };
 }
@@ -204,8 +206,13 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#fff'
-    },
+        justifyContent: 'center',
+      },
+      horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10,
+      },
     flatList: {
         flex: 1,
         backgroundColor: '#fff'
