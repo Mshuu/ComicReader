@@ -107,7 +107,7 @@ export class FinishedIssue extends React.PureComponent {
                 <Card>
                     <TouchableOpacity onPress={() => this._CardOnPress()}>
                         <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                            <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issue,{opacity:0.3}}/>
+                            <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issueFinished}/>
                         </CardItem>
                     </TouchableOpacity>
                 </Card>
@@ -143,6 +143,13 @@ const styles = StyleSheet.create({
         width: 180,
         flex: 1,
         minWidth: 180
+    },
+    issueFinished: {
+        height: 277,
+        width: 180,
+        flex: 1,
+        minWidth: 180,
+        opacity: 0.3
     },
     contentContainer: {
         paddingTop: 30
