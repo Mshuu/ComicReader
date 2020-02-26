@@ -32,19 +32,18 @@ export class UnFinishedIssue extends React.PureComponent {
     render(){
         let tempWidth = (this.state.item.page / this.state.item.link[3]['pse:count']) * 100;
         return (
-            <Card>
-                <TouchableOpacity  onPress={() => this._CardOnPress()}>
-                    <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                        <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issue}/>
-                    </CardItem>
-                </TouchableOpacity>
-                <CardItem>
-                    <View style={styles.progressBar}>
-                        <View style={[StyleSheet.absoluteFill], {backgroundColor: "#8BED4F", width : "" + tempWidth + "%", maxWidth: 180 }}></View>
-                    </View>
-                </CardItem>
-    
-            </Card>
+            <View>
+                <Card>
+                    <TouchableOpacity  onPress={() => this._CardOnPress()}>
+                        <CardItem cardBody button onPress={() => this._CardOnPress()}>
+                            <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issue}/>
+                        </CardItem>
+                    </TouchableOpacity>
+                </Card>
+                <View style={styles.progressBar}>
+                    <View style={[StyleSheet.absoluteFill], {backgroundColor: "#8BED4F", width : "" + tempWidth + "%", maxWidth: 180 }}></View>
+                </View>
+            </View>
         );
     }
 }
@@ -70,13 +69,15 @@ export class UnreadIssue extends React.PureComponent {
     }
     render(){
         return (
-            <Card>
-            <TouchableOpacity  onPress={() => this._CardOnPress()}>
-                <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                    <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issue}/>
-                </CardItem>
-            </TouchableOpacity>
-        </Card>
+            <View>
+                <Card>
+                <TouchableOpacity  onPress={() => this._CardOnPress()}>
+                    <CardItem cardBody button onPress={() => this._CardOnPress()}>
+                        <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issue}/>
+                    </CardItem>
+                </TouchableOpacity>
+            </Card>
+        </View>
         );
     }
 }
@@ -102,13 +103,15 @@ export class FinishedIssue extends React.PureComponent {
     }
     render(){
         return (
-            <Card>
-                <TouchableOpacity onPress={() => this._CardOnPress()}>
-                    <CardItem cardBody button onPress={() => this._CardOnPress()}>
-                        <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issue,{opacity:0.3}}/>
-                    </CardItem>
-                </TouchableOpacity>
-            </Card>
+            <View>
+                <Card>
+                    <TouchableOpacity onPress={() => this._CardOnPress()}>
+                        <CardItem cardBody button onPress={() => this._CardOnPress()}>
+                            <Image resizeMode={'contain'} source={{uri: "http://opds.mml2.net:2202" + this.state.item.link[0].href}} style={styles.issue,{opacity:0.3}}/>
+                        </CardItem>
+                    </TouchableOpacity>
+                </Card>
+            </View>
         );
     }
 }
@@ -153,6 +156,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 5,
         marginTop: 2,
+        marginLeft: 2,
         maxWidth: 180,
         backgroundColor: 'white',
         borderColor: '#000',
