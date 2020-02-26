@@ -191,18 +191,10 @@ export default class IssueScreen extends Component {
 
 
     render() {
-        
-        const config = {
-            velocityThreshold: 0.5,
-            directionalOffsetThreshold: 80,
-            detectSwipeUp: false,
-            detectSwipeDown: false,
-        };
-
         if (this.state.isLoading) {
             return (
                 <View>
-                    <Text>"HELLO"</Text>
+                    <Text>"Loading"</Text>
                 </View>
             )
         } else {

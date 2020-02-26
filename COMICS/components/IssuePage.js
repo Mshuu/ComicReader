@@ -72,7 +72,9 @@ export class IssuePage extends React.PureComponent{
             width: this.props.state.width,
             height: this.props.state.height,
             id: this.props.state.id,
-            page: this.props.state.page
+            page: this.props.state.page,
+            pageCount: this.props.state.pageCount,
+            loading: true
         }
     }
     _orientationChanged = () => {
@@ -84,7 +86,7 @@ export class IssuePage extends React.PureComponent{
     }
     _updateImageHeight = () => {
         Image.getSize("http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", (width, height) => 
-        {this.setState({imageHeight: height, imageWidth: width})});
+        {this.setState({imageHeight: height, imageWidth: width, aspect: height/width})});
     }
     componentDidMount(){
         this._orientationChanged();
@@ -92,12 +94,32 @@ export class IssuePage extends React.PureComponent{
             this._orientationChanged();
         });
         this._updateImageHeight();
+        this._preFetchImages();
+    }
+    _preFetchImages = async() => {
+        try{
+            const maximumPages = parseInt(this.state.pageCount) + 1;
+            for (var i=1;i<maximumPages + 1;i++){
+                console.log(i);
+                await Image.prefetch("http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + i + "");
+                if (i == 1){
+                    this.setState({loading: false});
+                }
+            }
+        } catch(e){
+            console.log(e);
+        }
     }
     componentWillUnmount() {
         Dimensions.removeEventListener('change');
     }
     render(){
-        if (!this.state.portrait){
+        if (this.state.loading){
+            return(
+                <View><Text>Loading</Text></View>
+            )
+        }
+        if (!this.state.portrait && !this.state.loading){
         return(
             <ScrollView ref='_scrollView' contentContainerStyle={{alignItems: 'center'}} minimumZoomScale={1} maximumZoomScale={10}>
                 <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
@@ -107,11 +129,11 @@ export class IssuePage extends React.PureComponent{
           </ScrollView>
         );
         }
-        if (this.state.portrait){
+        if (this.state.portrait && !this.state.loading){
             return(
             <ScrollView ref='_scrollView' contentContainerStyle={{alignItems: 'center'}} minimumZoomScale={1} maximumZoomScale={10}>
             <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
-                <Image style={{height: this.state.imageHeight,width: this.state.width,resizeMode:'stretch',flex: 1}}
+                <Image style={{height: this.state.width * this.state.aspect,width: this.state.width,resizeMode:'cover',flex: 1}}
                 source={{uri: "http://opds.mml2.net:2202/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
             </TouchableHighlight>
       </ScrollView> 
