@@ -33,6 +33,7 @@ export class IssuePage extends React.PureComponent{
             this.setState({ page: pageCount - 1 })
         } else {
             this.setState({ page: newPage })
+            this._preFetchImages();
         }
     }
     _resetScroll = () => {
@@ -96,12 +97,11 @@ export class IssuePage extends React.PureComponent{
     }
     _preFetchImages = async() => {
         try{
-            const maximumPages = parseInt(this.state.pageCount) + 1;
-            for (var i=1;i<maximumPages + 1;i++){
-                await Image.prefetch(this.props.opds + "/opds-comics/comicreader/" + this.state.id + "?page=" + i + "");
-                if (i == 1){
-                    this.setState({loading: false});
-                }
+            for (var i=this.state.page;i<this.state.page + 5;i++){
+                    await Image.prefetch(this.props.opds + "/opds-comics/comicreader/" + this.state.id + "?page=" + i + "");
+                    if (i == this.state.page){
+                        this.setState({loading: false});
+                    }
             }
         } catch(e){
             console.log(e);
