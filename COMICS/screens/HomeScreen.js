@@ -16,6 +16,14 @@ const mapStateToProps = (state) => {
     return state;
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+      updateOPDS: (opds) => dispatch({ type: 'UPDATE_OPDS', payload: {opds: opds}}),
+      updateUUID: (uuid) => dispatch({ type: 'UPDATE_UUID', payload: {uuid: uuid}})
+    }
+  }
+  
+
 class HomeScreen extends Component {
   constructor(props){
     super(props);
@@ -47,7 +55,28 @@ class HomeScreen extends Component {
             )
         };
     };
+    updatingUUID = async() => {
+        try{
+            const uuid = await AsyncStorage.getItem('uuid') || this.props.uuid;
+            const opds = await AsyncStorage.getItem('opds') || this.props.opds;
+            this.state.socket.emit("GiveOPDS", uuid);
+            this.props.updateUUID(uuid);
+            this.props.updateOPDS(opds);
+        } catch(e){
+            console.log(e);
+        }
+    }
+    GotOPDS = async(data) => {
+        try {
+            this.props.updateOPDS(data);
+            await AsyncStorage.setItem('opds',data);
+        } catch(e){
+            console.log(e);
+        }
+
+    }
     componentDidMount() {
+        this.updatingUUID();
         this.state.socket.on('connect', () => {
             this.setState({isConnected: true});
         });
@@ -62,6 +91,9 @@ class HomeScreen extends Component {
             console.log("downloading: " + data);
         });
         this.GettingBooks();
+        this.state.socket.on("GotOPDS", data=> {
+            this.GotOPDS(data);
+        })
         this.state.socket.emit("GetHome", "mg");
 
         this.props.navigation.addListener('didFocus', () => {
@@ -106,6 +138,7 @@ class HomeScreen extends Component {
         this.setState({search});
     };
     GettingBooks = async() => {
+        console.log("Getting Books");
         try {
             let books = await AsyncStorage.getItem('books') || [];
             this.setState({
@@ -120,6 +153,10 @@ class HomeScreen extends Component {
         }
     }
     HandleReads = async(data) => {
+        console.log(data);
+        if (data.length == 0){
+            this.setState({gotReads: true});
+        }
         for (var i = 0; i < data.length; i++) {
             for (var x = 0; x < this.state.books.length; x++) {
                 if (this.state.books[x].issues.length > 0) {
@@ -145,6 +182,7 @@ class HomeScreen extends Component {
         }
     }
     HandleHome = async(data, socket) => {
+        console.log("Handling home");
         let books = [];
         for (var i = 0; i < data.length; i++) {
             var issueCount;
@@ -157,7 +195,7 @@ class HomeScreen extends Component {
 
         }
         this.setState({books: books, isLoading: false});
-        socket.emit("GetReads", 1);
+        socket.emit("GetReads", this.props.uuid);
         try {
             await AsyncStorage.setItem('books', JSON.stringify(books));
         } catch (e) {
@@ -328,4 +366,4 @@ const styles = StyleSheet.create({
 });
 
   
-export default connect(mapStateToProps)(HomeScreen)
+export default connect(mapStateToProps,mapDispatchToProps)(HomeScreen)

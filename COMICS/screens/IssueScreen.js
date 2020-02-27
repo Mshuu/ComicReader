@@ -52,7 +52,7 @@ class IssueScreen extends Component {
         const { navigation } = this.props;
         StatusBar.setHidden(true);
         let socket = navigation.getParam("socket");
-        socket.emit("GetSpecificRead",JSON.stringify({"userId": 1, issueId: navigation.getParam("id")}));
+        socket.emit("GetSpecificRead",JSON.stringify({"userId": this.props.uuid, issueId: navigation.getParam("id")}));
         socket.on('GotSpecificRead', data => {
            this.getPage(data);
           });
@@ -168,7 +168,7 @@ class IssueScreen extends Component {
     async updateSavedPage(){
         try {
           //  await AsyncStorage.setItem(this.state.id,this.state.page);
-            this.state.socket.emit("UpdateReads",JSON.stringify({userId: 1,issueId: this.state.id, page: this.state.page}))
+            this.state.socket.emit("UpdateReads",JSON.stringify({userId: this.props.uuid,issueId: this.state.id, page: this.state.page}))
         } catch(e){
             console.log(e);
         }
@@ -177,7 +177,7 @@ class IssueScreen extends Component {
         if (page > this.state.page){
         try {
             //await AsyncStorage.setItem(this.state.id,page);
-            this.state.socket.emit("UpdateReads",JSON.stringify({userId: 1,issueId: this.state.id, page: page}))
+            this.state.socket.emit("UpdateReads",JSON.stringify({userId: this.props.uuid,issueId: this.state.id, page: page}))
         } catch(e){
             console.log(e);
         }
@@ -205,7 +205,7 @@ class IssueScreen extends Component {
         } else {
             if (!this.state.vertical){
             return (
-                <IssuePage navigation={this.props.navigation} state={this.state} opds={this.props.opds}/>
+                <IssuePage navigation={this.props.navigation} state={this.state} opds={this.props.opds} uuid={this.props.uuid}/>
             );} else {
                 return (
                     <FlatList

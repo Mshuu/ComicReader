@@ -6,6 +6,7 @@ let ReadController = require('./controllers/readController.js');
 let HomeController = require('./controllers/homeController.js');
 let BookController = require("./controllers/bookController.js");
 let IssuesController = require("./controllers/issuesController.js");
+let UserController = require("./controllers/userController.js");
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -21,6 +22,10 @@ io.on('connection', function(socket){
   socket.on('GetSpecificRead', (msg) => {ReadController.getSpecificRead(msg,socket)});
 
   socket.on('GetIssues', (msg) => IssuesController.RequestIssue(msg,socket));
+
+  socket.on('UpdateOPDS', (msg) => {UserController.updateOPDS(msg)});
+
+  socket.on('GiveOPDS', (msg) => {UserController.giveOPDS(msg,socket)});
 
 });
 

@@ -16,11 +16,11 @@ export class IssuePage extends React.PureComponent{
     _updateSavedPage = async() => {
         try {
             if (this.state.page < 0){
-                this.state.socket.emit("UpdateReads",JSON.stringify({userId: 1,issueId: this.state.id, page: 0}))
+                this.state.socket.emit("UpdateReads",JSON.stringify({userId: this.props.uuid,issueId: this.state.id, page: 0}))
             } else if (this.state.page >= this.state.pageCount){
-                this.state.socket.emit("UpdateReads",JSON.stringify({userId: 1,issueId: this.state.id, page: this.state.pageCount - 1}))
+                this.state.socket.emit("UpdateReads",JSON.stringify({userId: this.props.uuid,issueId: this.state.id, page: this.state.pageCount - 1}))
             } else {
-                this.state.socket.emit("UpdateReads",JSON.stringify({userId: 1,issueId: this.state.id, page: this.state.page}))
+                this.state.socket.emit("UpdateReads",JSON.stringify({userId: this.props.uuid,issueId: this.state.id, page: this.state.page}))
             }
         } catch(e){
             console.log(e);
