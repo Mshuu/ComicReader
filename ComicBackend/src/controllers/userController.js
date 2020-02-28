@@ -20,7 +20,6 @@ const giveOPDS = async(msg,socket) => {
     try{
         let foundUser = await dbModel.FindOne("users",{userId: msg});
         if (foundUser){
-            console.log(foundUser)
             socket.emit("GotOPDS",foundUser.opds);
         }
     } catch(e){
