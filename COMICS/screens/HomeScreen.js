@@ -4,7 +4,8 @@ import {
     StyleSheet,
     AsyncStorage,
     ActivityIndicator,
-    View
+    View,
+    RefreshControl
 } from 'react-native';
 import io from 'socket.io-client';
 import {SearchBar} from 'react-native-elements';
@@ -34,6 +35,7 @@ class HomeScreen extends Component {
       isConnected: false,
       noStorage: true,
       gotReads: false,
+      refreshing: false,
       books: [],
       data: [],
       search: "",
@@ -55,6 +57,11 @@ class HomeScreen extends Component {
             )
         };
     };
+    onRefresh = () => {
+        this.setState({ refreshing: true });
+        console.log("refreshing");
+        this.GetBooksRefresh();
+     }
     updatingUUID = async() => {
         try{
             const uuid = await AsyncStorage.getItem('uuid') || this.props.uuid;
@@ -151,6 +158,10 @@ class HomeScreen extends Component {
         } catch (e) {
             console.log(e);
         }
+    };
+    GetBooksRefresh = async() => {
+        this.state.socket.emit("GetReads", this.props.uuid);
+        this.setState({refreshing: false});
     }
     HandleReads = async(data) => {
         console.log(data);
@@ -229,6 +240,12 @@ class HomeScreen extends Component {
                     initialNumToRender={4}
                     maxToRenderPerBatch={4}
                     removeClippedSubviews={true}
+                    refreshControl={
+                        <RefreshControl
+                         refreshing={this.state.refreshing}
+                         onRefresh={this.onRefresh}
+                        />
+                      }
                     keyExtractor={item => item.id}
                     renderItem={this
                     ._renderItem
