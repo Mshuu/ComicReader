@@ -21,7 +21,7 @@ class SettingsScreen extends Component {
 
   constructor(props){
     super(props);
-    const socket = io('http://opds.mml2.net:3000', {transports: ['websocket'], pingTimeout: 30000});
+    const socket = io('https://l2.mml2.net:3000', {transports: ['websocket'], pingTimeout: 30000});
     this.state={
       opds: props.opds,
       uuid: props.uuid,
