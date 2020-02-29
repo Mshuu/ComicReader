@@ -1,7 +1,11 @@
 var app = require('express')();
-var http = require('http').createServer(app);
+const https = require('https').createServer(app,options);
+const fs = require('fs');
 var io = require('socket.io')(http);
-
+const options = {
+  key: fs.readFileSync('privkey.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
 let ReadController = require('./controllers/readController.js');
 let HomeController = require('./controllers/homeController.js');
 let BookController = require("./controllers/bookController.js");
@@ -29,7 +33,7 @@ io.on('connection', function(socket){
 
 });
 
-http.listen(3000, function(){
+https.listen(3000, function(){
   console.log('listening on *:3000');
 });
 
