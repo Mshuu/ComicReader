@@ -1,11 +1,11 @@
 var app = require('express')();
 const fs = require('fs');
-var io = require('socket.io')(http);
 const options = {
   key: fs.readFileSync('privkey.pem'),
   cert: fs.readFileSync('cert.pem')
 };
 const https = require('https').createServer(app,options);
+var io = require('socket.io')(https);
 
 let ReadController = require('./controllers/readController.js');
 let HomeController = require('./controllers/homeController.js');
