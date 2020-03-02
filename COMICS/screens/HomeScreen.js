@@ -148,12 +148,21 @@ class HomeScreen extends Component {
         console.log("Getting Books");
         try {
             let books = await AsyncStorage.getItem('books') || [];
-            this.setState({
-                books: JSON.parse(books),
-                noStorage: false,
-                isLoading: false,
-                data: JSON.parse(books)
-            });
+            if (books != []){
+                this.setState({
+                    books: [],
+                    noStorage: false,
+                    isLoading: false,
+                    data: JSON.parse(books)
+                });
+            } else {
+                this.setState({
+                    books: JSON.parse(books),
+                    noStorage: false,
+                    isLoading: false,
+                    data: JSON.parse(books)
+                });
+            }
 
         } catch (e) {
             console.log(e);
