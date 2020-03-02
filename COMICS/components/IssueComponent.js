@@ -30,9 +30,13 @@ export class UnFinishedIssue extends React.PureComponent {
         };
     }
     render(){
-        let tempWidth = (this.state.item.page / this.state.item.link[3]['pse:count']) * 100;
+        const tempWidth = (this.state.item.page / this.state.item.link[3]['pse:count']) * 100;
+        const title = this.state.item.title.replace(/ *\([^)]*\) */g, "");
         return (
             <View>
+                <View>
+                    <Text style={styles.titleText}>{title}</Text>
+                </View>
                 <Card>
                     <TouchableOpacity  onPress={() => this._CardOnPress()}>
                         <CardItem cardBody button onPress={() => this._CardOnPress()}>
@@ -68,8 +72,12 @@ export class UnreadIssue extends React.PureComponent {
         };
     }
     render(){
+        const title = this.state.item.title.replace(/ *\([^)]*\) */g, "");
         return (
-            <View>
+            <View>                
+                <View>
+                    <Text style={styles.titleText}>{title}</Text>
+                </View>
                 <Card>
                 <TouchableOpacity  onPress={() => this._CardOnPress()}>
                     <CardItem cardBody button onPress={() => this._CardOnPress()}>
@@ -102,8 +110,12 @@ export class FinishedIssue extends React.PureComponent {
         };
     }
     render(){
+        const title = this.state.item.title.replace(/ *\([^)]*\) */g, "");
         return (
             <View>
+                <View>
+                    <Text style={styles.titleText}>{title}</Text>
+                </View>
                 <Card>
                     <TouchableOpacity onPress={() => this._CardOnPress()}>
                         <CardItem cardBody button onPress={() => this._CardOnPress()}>
@@ -137,6 +149,12 @@ const styles = StyleSheet.create({
     row: {
         flex: 1,
         justifyContent: "space-around"
+    },
+    titleText: {
+        textAlign: 'center',
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginBottom: 5
     },
     issue: {
         height: 277,
