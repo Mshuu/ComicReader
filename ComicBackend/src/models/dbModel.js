@@ -1,7 +1,7 @@
 var mongo = require('mongodb');
 var url = "mongodb://localhost:27017";
 var MongoClient = require('mongodb').MongoClient;
-var urlMongo = "mongodb://l2.mml2.net:27017/comicbooks?socketTimeoutMS=90000";
+var urlMongo = "mongodb://localhost:27017/comicbooks?socketTimeoutMS=90000";
 
 const InsertOne = (collection,object) => {
     mongo.connect(url, function (err, db) {
