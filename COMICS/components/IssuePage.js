@@ -10,8 +10,6 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import * as Progress from 'react-native-progress';
-
 export class IssuePage extends React.PureComponent{
 
     _updateSavedPage = async() => {
@@ -111,7 +109,6 @@ export class IssuePage extends React.PureComponent{
         if (!this.state.loading){
             return(
             <ScrollView ref='_scrollView' contentContainerStyle={{alignItems: 'center'}} minimumZoomScale={1} maximumZoomScale={10}>
-                <Progress.Bar progress={0.3} width={200} />
                 <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
                     <Image 
                     style={{
