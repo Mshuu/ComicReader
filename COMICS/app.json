@@ -29,7 +29,7 @@
     },
     "android": {
       "package": "ca.daluz.comicviewer",
-      "versionCode" : 1
+      "versionCode": 1
     },
     "description": ""
   }

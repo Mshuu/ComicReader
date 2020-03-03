@@ -10,31 +10,21 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
+import * as Progress from 'react-native-progress';
 
 export class IssuePage extends React.PureComponent{
 
     _updateSavedPage = async() => {
-        try {
-            if (this.state.page < 0){
-                this.state.socket.emit("UpdateReads",JSON.stringify({userId: this.props.uuid,issueId: this.state.id, page: 0}))
-            } else if (this.state.page >= this.state.pageCount){
-                this.state.socket.emit("UpdateReads",JSON.stringify({userId: this.props.uuid,issueId: this.state.id, page: this.state.pageCount - 1}))
-            } else {
-                this.state.socket.emit("UpdateReads",JSON.stringify({userId: this.props.uuid,issueId: this.state.id, page: this.state.page}))
-            }
-        } catch(e){
-            console.log(e);
-        }
+        const page = this.state.page < 0 ? 0 : this.state.page >= this.state.pageCount ? this.state.pageCount - 1 : this.state.page; 
+        this._UpdateReads(page);
+    }
+    _UpdateReads = (page) => {
+        this.state.socket.emit("UpdateReads",JSON.stringify({userId: this.props.uuid,issueId: this.state.id, page: page}));
     }
     _updatePage = (newPage) => {
-        if (newPage < 0){
-            this.setState({ page: 0 })
-        } else if (newPage >= this.state.pageCount){
-            this.setState({ page: pageCount - 1 })
-        } else {
-            this.setState({ page: newPage })
-            this._preFetchImages();
-        }
+        let page = newPage < 0 ? 0 : newPage >= this.state.pageCount ? pageCount -1 : newPage;
+        this.setState({page: page});
+        this._preFetchImages();
     }
     _resetScroll = () => {
         this.refs._scrollView.scrollTo({x:0,y:0,animated:true});
@@ -59,10 +49,10 @@ export class IssuePage extends React.PureComponent{
             this._resetScroll();
         } else if (this.state.headerShown){
             this.props.navigation.setParams({ showHeader: false })
-            this.setState({headerShown: false})
+            this.setState({headerShown: false, showPage: false});
         } else {
             this.props.navigation.setParams({ showHeader: true })
-            this.setState({headerShown: true})
+            this.setState({headerShown: true,showPage: true})
         }
     }
     constructor(props){
@@ -118,24 +108,21 @@ export class IssuePage extends React.PureComponent{
               </View>
             )
         }
-        if (!this.state.portrait && !this.state.loading){
-        return(
-            <ScrollView ref='_scrollView' contentContainerStyle={{alignItems: 'center'}} minimumZoomScale={1} maximumZoomScale={10}>
-                <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
-                    <Image style={{height: this.state.height,width: this.state.width,resizeMode:'contain',flex: 1}}
-                    source={{uri: this.props.opds + "/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
-                </TouchableHighlight>
-          </ScrollView>
-        );
-        }
-        if (this.state.portrait && !this.state.loading){
+        if (!this.state.loading){
             return(
             <ScrollView ref='_scrollView' contentContainerStyle={{alignItems: 'center'}} minimumZoomScale={1} maximumZoomScale={10}>
-            <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
-                <Image style={{height: this.state.width * this.state.aspect,width: this.state.width,resizeMode:'cover',flex: 1}}
-                source={{uri: this.props.opds + "/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
-            </TouchableHighlight>
-      </ScrollView> 
+                <Progress.Bar progress={0.3} width={200} />
+                <TouchableHighlight  onPress={(evt) => {this._clickedPage(evt)}}>
+                    <Image 
+                    style={{
+                        height: this.state.portrait ? this.state.width * this.state.aspect : this.state.height,
+                        width: this.state.width,
+                        resizeMode:'cover',
+                        flex: 1
+                    }}
+                    source={{uri: this.props.opds + "/opds-comics/comicreader/" + this.state.id + "?page=" + this.state.page + "", cache: "force-cache" }}/>
+                </TouchableHighlight>
+            </ScrollView> 
             )
         }
 
@@ -150,5 +137,5 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-around',
       padding: 10,
-    },
+    }
   });
