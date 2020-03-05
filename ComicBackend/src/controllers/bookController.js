@@ -6,7 +6,7 @@ const opds = "http://opds.mml2.net:2202";
 
 const GetBooksOPDS = async() => {
     try {
-        let res = await utils.doRequest(opds + "13408");
+        let res = await utils.doRequest(opds + "/opds-comics/13408");
         let json = xmlParser.toJson(res);
         let obj = JSON.parse(json);
         HandleBooks(obj.feed.entry);
