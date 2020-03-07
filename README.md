@@ -8,4 +8,4 @@ It's in progress, don't judge. :)
 
 Can be found at comics.mml2.net
 
-This is pulled from a legally owned OPDS server, options to add your own server will be coming in the future.
+This is pulled from a legally owned OPDS server, options to add your own server will be coming in the future and the default OPDS server will be removed.
